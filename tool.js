@@ -1,1 +1,0 @@
-if(!!document.getElementById("iframe1")==false){var d=document;var e=d.createElement("script");e.charset="utf-8";e.src="//panchitool.xsrv.jp/special/aid/aid2start.js"+"?%22+new%20Date().getTime();d.getElementsByTagName("head")[0].appendChild(e);}
