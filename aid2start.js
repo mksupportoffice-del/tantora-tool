@@ -2,37 +2,45 @@
     // 二重起動防止用
     if (document.getElementById("tantora-aid-box")) return;
 
-    // 操作パネルを画面内に作成（スマホでも見やすいように表示）
+    // 操作パネルを作成
     var panel = document.createElement("div");
     panel.id = "tantora-aid-box";
-    panel.style.cssText = "position:fixed; top:10px; left:10px; z-index:99999; background:rgba(0,0,0,0.85); color:#fff; padding:10px; border-radius:8px; font-size:12px; max-width:90%;";
+    panel.style.cssText = "position:fixed; top:10px; left:10px; z-index:99999; background:rgba(0,0,0,0.9); color:#fff; padding:12px; border-radius:8px; font-size:12px; max-width:90%; box-shadow: 0 4px 6px rgba(0,0,0,0.3);";
     panel.innerHTML = `
-        <div style="font-weight:bold; margin-bottom:6px; color:#ffcc00; text-align:center;">▶ 回復アイテム補給支援</div>
-        <div style="margin-bottom:6px;">
-            1. メンバー一覧で対象を選ぶか、IDを入力<br>
-            2. 下のボタンで一括補給！
+        <div style="font-weight:bold; margin-bottom:8px; color:#ffcc00; text-align:center; font-size:14px;">▶ メンバー回復支援ツール</div>
+        <div style="margin-bottom:8px; line-height: 1.4;">
+            1. メンバーのIDを入力して移動<br>
+            2. ページ内で自動補給を実行
         </div>
-        <button id="tantora-heal-btn" style="background:#ff4757; color:#white; border:none; padding:8px 12px; border-radius:4px; font-weight:bold; width:100%; cursor:pointer;">HP・体力・気合を補給する</button>
-        <button id="tantora-close-btn" style="background:#555; color:#white; border:none; padding:4px 8px; border-radius:4px; margin-top:6px; width:100%; cursor:pointer;">閉じる</button>
+        <button id="tantora-id-btn" style="background:#007aff; color:white; border:none; padding:8px 10px; border-radius:4px; font-weight:bold; width:100%; margin-bottom:6px; cursor:pointer;">IDを指定してメンバーへ移動</button>
+        <button id="tantora-heal-btn" style="background:#ff4757; color:white; border:none; padding:8px 10px; border-radius:4px; font-weight:bold; width:100%; margin-bottom:6px; cursor:pointer;">このページで回復・補給を実行</button>
+        <button id="tantora-close-btn" style="background:#555; color:white; border:none; padding:4px 8px; border-radius:4px; width:100%; cursor:pointer;">パネルを閉じる</button>
     `;
     document.body.appendChild(panel);
 
-    // 閉じるボタンの動作
+    // 閉じるボタン
     document.getElementById("tantora-close-btn").onclick = function() {
         panel.remove();
+        var frame = document.getElementById("iframe1");
+        if(frame) frame.remove();
     };
 
-    // 「補給する」ボタンを押したときの動作
+    // ①「IDを指定してメンバーへ移動」ボタンの動作
+    document.getElementById("tantora-id-btn").onclick = function() {
+        var id = prompt('移動したいメンバーのID番号を入力してください\n(例: 7916031)');
+        if (id) {
+            location.href = 'https://tantora.jp/player?other_id=' + id.trim();
+        }
+    };
+
+    // ②「このページで回復・補給を実行」ボタンの動作
     document.getElementById("tantora-heal-btn").onclick = function() {
         var count = 0;
-        
-        // ページ内にある「回復」「使う」「使用」「アイテム」などのボタンやリンクを自動で探して押す
         var elements = document.querySelectorAll('button, a, input[type="submit"], input[type="button"]');
         
         for (var i = 0; i < elements.length; i++) {
             var text = elements[i].innerText || elements[i].value || '';
-            // HP、体力、気合、回復、イマンなどのキーワードに反応して自動クリック
-            if (text && (text.includes('回復') || text.includes('使う') || text.includes('使用') || text.includes('HP') || text.includes('体力') || text.includes('気合'))) {
+            if (text && (text.includes('回復') || text.includes('使う') || text.includes('使用') || text.includes('HP') || text.includes('体力') || text.includes('気合') || text.includes('イマン'))) {
                 elements[i].click();
                 count++;
             }
@@ -41,7 +49,7 @@
         if (count > 0) {
             alert(count + '個の補給・回復ボタンを実行しました！');
         } else {
-            alert('このページに対象の補給ボタンが見つかりませんでした。\nメンバーの個別ページを開いてから実行してください。');
+            alert('このページに対象の補給ボタンが見つかりませんでした。');
         }
     };
 })();
