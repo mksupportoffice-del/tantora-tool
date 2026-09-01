@@ -1,8 +1,6 @@
 (function() {
-    // 二重起動防止用
     if (document.getElementById("tantora-aid-box")) return;
 
-    // 操作パネルを作成
     var panel = document.createElement("div");
     panel.id = "tantora-aid-box";
     panel.style.cssText = "position:fixed; top:10px; left:10px; z-index:99999; background:rgba(0,0,0,0.9); color:#fff; padding:12px; border-radius:8px; font-size:12px; max-width:90%; box-shadow: 0 4px 6px rgba(0,0,0,0.3);";
@@ -18,7 +16,6 @@
     `;
     document.body.appendChild(panel);
 
-    // 閉じるボタン
     var closeBtn = document.getElementById("tantora-close-btn");
     if (closeBtn) {
         closeBtn.onclick = function() {
@@ -26,7 +23,6 @@
         };
     }
 
-    // ①「IDを指定してメンバーへ移動」ボタンの動作
     var idBtn = document.getElementById("tantora-id-btn");
     if (idBtn) {
         idBtn.onclick = function() {
@@ -37,7 +33,6 @@
         };
     }
 
-    // ②「このページで回復・補給を実行」ボタンの動作
     var healBtn = document.getElementById("tantora-heal-btn");
     if (healBtn) {
         healBtn.onclick = function() {
